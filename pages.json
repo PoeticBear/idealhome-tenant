@@ -119,12 +119,6 @@
 				"text": "首页"
 			},
 			{
-				"pagePath": "pages/market/market",
-				"iconPath": "static/image/tabBar/market.png",
-				"selectedIconPath": "static/image/tabBar/market-on.png",
-				"text": "房市"
-			},
-			{
 				"pagePath": "pages/user/user",
 				"iconPath": "static/image/tabBar/user.png",
 				"selectedIconPath": "static/image/tabBar/user-on.png",

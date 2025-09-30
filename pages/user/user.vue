@@ -3,7 +3,11 @@
 		<view class="user-info-bg">
 		</view>
 		<view class="user-info-view">
-			<s-image class="user-avatar" mode="aspectFill" :src="userInfo.headImg||avatarUrl"></s-image>
+			<view class="user-avatar">
+				<view class="user-avatar-placeholder">
+					<text class="user-avatar-text">{{userInfo.name ? userInfo.name.charAt(0).toUpperCase() : 'U'}}</text>
+				</view>
+			</view>
 			<view class="user-name" v-if="isLogin">{{userInfo.name}}</view>
 			<view class="user-name" @click="toLogin" v-if="!isLogin">点击登录</view>
 			<view class="user-signature" v-show="userInfo.remark && isLogin">
@@ -31,8 +35,10 @@
 					</u--input>
 				</u-form-item>
 				<u-form-item label="头像：" borderBottom>
-					<u-upload :previewFullImage="true" :fileList="userInfoData.headImg" @afterRead="headImgAfterRead"
-						@delete="headImgDeletePic" :maxCount="1"></u-upload>
+					<view class="avatar-upload-placeholder">
+						<view class="avatar-upload-icon">📷</view>
+						<text class="avatar-upload-text">点击上传头像</text>
+					</view>
 				</u-form-item>
 				<u-form-item label="宣言：" prop="remark" borderBottom>
 					<u--input v-model="userInfoData.remark" placeholder="请输入" :maxlength="100" clearable>
@@ -44,8 +50,7 @@
 </template>
 
 <script>
-	import sImage from "@/components/sImage/sImage.vue"
-	import {
+		import {
 		mapState,
 		mapMutations,
 		mapActions
@@ -61,9 +66,6 @@
 					headImg: []
 				},
 			}
-		},
-		components: {
-			sImage
 		},
 		computed: {
 			...mapState(['isLogin', 'userInfo']),
@@ -270,6 +272,23 @@
 				left: 0;
 				right: 0;
 				margin: 0 auto;
+
+				.user-avatar-placeholder {
+					width: 100%;
+					height: 100%;
+					border-radius: 50%;
+					background: linear-gradient(135deg, #FFA92F, #FFDC2F);
+					display: flex;
+					align-items: center;
+					justify-content: center;
+
+					.user-avatar-text {
+						font-size: 80rpx;
+						font-weight: bold;
+						color: #fff;
+						text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.2);
+					}
+				}
 			}
 
 			.user-name {
@@ -301,5 +320,36 @@
 		height: 100rpx;
 		border-bottom: solid 1px #eee;
 		padding: 0 60rpx;
+	}
+
+	.avatar-upload-placeholder {
+		width: 120rpx;
+		height: 120rpx;
+		border-radius: 50%;
+		background: linear-gradient(135deg, #FFA92F, #FFDC2F);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		border: 2rpx dashed #fff;
+		cursor: pointer;
+		transition: all 0.3s ease;
+
+		&:hover {
+			transform: scale(1.05);
+			box-shadow: 0 4rpx 12rpx rgba(255, 169, 47, 0.3);
+		}
+
+		.avatar-upload-icon {
+			font-size: 40rpx;
+			margin-bottom: 4rpx;
+		}
+
+		.avatar-upload-text {
+			font-size: 20rpx;
+			color: #fff;
+			text-align: center;
+			line-height: 1.2;
+		}
 	}
 </style>
