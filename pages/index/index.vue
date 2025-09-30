@@ -96,20 +96,12 @@
 			},
 			switchHouseInfo(data) {
 				this.houseInfo = JSON.parse(JSON.stringify(data))
-				if (
-					this.houseInfo.headImg
-				) {
-					this.houseInfo.headImg = JSON.parse(this.houseInfo.headImg)
-					if (this.houseInfo.headImg.length === 0) {
-						this.houseInfo.headImg = [{
-							url: '/static/image/no-img.jpg'
-						}]
-					}
-				} else {
-					this.houseInfo.headImg = [{
-						url: '/static/image/no-img.jpg'
-					}]
-				}
+				// 使用固定的3张本地图片用于演示
+				this.houseInfo.headImg = [
+					{ url: '/static/image/house_sample.png' },
+					{ url: '/static/image/house_sample.png' },
+					{ url: '/static/image/house_sample.png' }
+				]
 			},
 			swiperClick(index) {
 				uni.previewImage({

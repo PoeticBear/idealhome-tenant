@@ -8,10 +8,8 @@
 
 		},
 		onLaunch: function() {
-			const token = uni.getStorageSync("token")
-			if (token) {
-				this.getUserInfo(true)
-			}
+			console.log("应用启动，开始检查登录状态...");
+			this.checkLoginStatus();
 		},
 		onShow: function() {
 			// 检查新版本是否存在
@@ -41,7 +39,75 @@
 		},
 		onHide: function() {},
 		methods: {
-			...mapActions(['getUserInfo'])
+			...mapActions(['getUserInfo']),
+
+			// 检查登录状态
+			async checkLoginStatus() {
+				console.log("=== 开始检查登录状态 ===");
+
+				try {
+					const token = uni.getStorageSync("token");
+					console.log("获取到token:", token ? "存在" : "不存在");
+
+					if (token) {
+						console.log("发现token，开始验证用户信息...");
+						// 显示检查状态的提示
+						uni.showLoading({
+							title: "正在验证登录状态...",
+							mask: true
+						});
+
+						try {
+							// 验证token有效性并获取用户信息
+							await this.getUserInfo(true);
+							console.log("✅ 用户信息验证完成");
+							uni.hideLoading();
+						} catch (error) {
+							uni.hideLoading();
+							throw error;
+						}
+					} else {
+						console.log("❌ 未发现token，用户未登录");
+						// 确保登录状态为false
+						this.setLogin(false);
+						this.setUserInfo({});
+					}
+				} catch (error) {
+					console.error("❌ 检查登录状态失败:", error);
+
+					// 如果是网络错误，可以尝试重试
+					if (error.message && error.message.includes("网络")) {
+						console.log("🔄 网络错误，2秒后重试...");
+						uni.showToast({
+							title: "网络连接失败，正在重试...",
+							icon: "none",
+							duration: 2000
+						});
+						setTimeout(() => {
+							this.checkLoginStatus();
+						}, 2000);
+					} else {
+						// 其他错误，清除登录状态
+						this.clearLoginState();
+						uni.showToast({
+							title: "登录状态已过期，请重新登录",
+							icon: "none",
+							duration: 3000
+						});
+					}
+				}
+			},
+
+			// 清除登录状态
+			clearLoginState() {
+				console.log("🗑️ 清除登录状态");
+				uni.removeStorageSync("token");
+				this.setLogin(false);
+				this.setUserInfo({});
+				this.setTokenExpiredTime(0);
+			},
+
+			...mapMutations(['setLogin', 'setUserInfo', 'setTokenExpiredTime'])
 		}
 	}
 </script>

@@ -5,6 +5,7 @@ const loginUrlArr = [
 	"api/tenantsUser/getPhoneNumber",
 	"api/tenantsUser/loginByWx",
 	"api/tenantsUser/refreshLogin",
+	"api/tenantsUser/login",
 ]; // 接口无需设置token请求头
 const http = new Request();
 http.setConfig((config) => {
