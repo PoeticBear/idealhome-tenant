@@ -3,7 +3,7 @@
 		<view class="imgback">
 			<view class="log-box">
 				<image src="/static/logo.png" mode="scaleToFill"></image>
-				<text class="text">欢迎使用房适</text>
+				<text class="text">欢迎来到理想窝</text>
 			</view>
 
 			<!-- 登录方式切换 -->
